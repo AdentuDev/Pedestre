@@ -5,6 +5,8 @@ import pandas as pd
 import subprocess
 import json
 import re
+import tkinter as tk
+from tkinter import filedialog
 
 def convert_to_decimal(degrees, minutes, seconds, direction):
     decimal = degrees + (minutes / 60.0) + (seconds / 3600.0)
@@ -100,10 +102,26 @@ def save_to_csv(data, csv_file):
     df = pd.DataFrame(data)
     df.to_csv(csv_file, index=False)
 
+def select_directory():
+    root = tk.Tk()
+    root.withdraw()
+
+    # Abrir el cuadro de diálogo para seleccionar un directorio
+    directorio_seleccionado = filedialog.askdirectory()
+
+    # Retornar el directorio seleccionado
+    return directorio_seleccionado
+
+
 def main():
-    directory = '20240815'  # Replace with the correct path if different
-    csv_file = '15 Agosto.csv'
+    #directory = '20240819'  # Replace with the correct path if different
+    #directory_temp = select_directory()
+    directory = select_directory()
+    print(directory)
+    #directory = directory_temp
+    csv_file = '19 Agosto.csv'
     
+    #image_data = process_directory(directory)
     image_data = process_directory(directory)
     save_to_csv(image_data, csv_file)
 
