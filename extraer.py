@@ -5,6 +5,8 @@ import pandas as pd
 import subprocess
 import json
 import re
+from tqdm import tqdm
+import time
 import tkinter as tk
 from tkinter import filedialog
 
@@ -68,18 +70,16 @@ def process_directory(directory):
     image_data = []
 
     for root, _, files in os.walk(directory):
-        for file in files:
+        for file in tqdm(files, desc=f"{root[-4:]} - Procesando", unit=" - Fotos"):
             if file.lower().endswith(('png', 'jpg', 'jpeg', 'tiff', 'bmp', 'gif')):
                 image_path = os.path.join(root, file)
-                #print(f"Processing file: {image_path}")
                 metadata = get_image_metadata(image_path)
                 if not metadata:
                     print(f"No metadata found for: {image_path}")
                     continue
-                #print(f"Metadata for {image_path}: {metadata}")
-                
+
                 image_info = {
-                    'Image Path': image_path,
+                    'Image Path': "/".join(image_path.split("/")[-3:]),
                     'Image Name': file,
                 }
                 if 'CreateDate' in metadata:
@@ -117,9 +117,9 @@ def main():
     #directory = '20240819'  # Replace with the correct path if different
     #directory_temp = select_directory()
     directory = select_directory()
-    print(directory)
+    print(directory.split("/")[-3:])
     #directory = directory_temp
-    csv_file = '19 Agosto.csv'
+    csv_file = f"{directory.split("/")[-1]} Agosto.csv"
     
     #image_data = process_directory(directory)
     image_data = process_directory(directory)
